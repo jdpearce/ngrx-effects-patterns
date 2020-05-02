@@ -1,1 +1,9 @@
-<p>dashboard works!</p>
+<h1>NgRX Effects Patterns</h1>
+
+<button (click)="nonDispatchingTapEffect()">Non-Dispatching Tap Effect</button>
+
+<hr />
+
+<ul *ngIf="$log | async as log">
+  <li *ngFor="let logItem of log; trackBy: $index">{{ logItem }}</li>
+</ul>
