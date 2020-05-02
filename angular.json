@@ -17,8 +17,13 @@
             "polyfills": "apps/todos/src/polyfills.ts",
             "tsConfig": "apps/todos/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/todos/src/favicon.ico", "apps/todos/src/assets"],
-            "styles": ["apps/todos/src/styles.css"],
+            "assets": [
+              "apps/todos/src/favicon.ico",
+              "apps/todos/src/assets"
+            ],
+            "styles": [
+              "apps/todos/src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -76,7 +81,10 @@
               "apps/todos/tsconfig.app.json",
               "apps/todos/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/todos/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/todos/**"
+            ]
           }
         },
         "test": {
@@ -111,11 +119,47 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/todos-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/todos-e2e/**"]
+            "tsConfig": [
+              "apps/todos-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/todos-e2e/**"
+            ]
           }
         }
       }
+    },
+    "todos-feature-ngrx-testing": {
+      "projectType": "library",
+      "root": "libs/todos/feature/ngrx-testing",
+      "sourceRoot": "libs/todos/feature/ngrx-testing/src",
+      "prefix": "ngrx-effects-patterns",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/todos/feature/ngrx-testing/tsconfig.lib.json",
+              "libs/todos/feature/ngrx-testing/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/todos/feature/ngrx-testing/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/todos/feature/ngrx-testing/jest.config.js",
+            "tsConfig": "libs/todos/feature/ngrx-testing/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/todos/feature/ngrx-testing/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
     }
   },
   "cli": {
