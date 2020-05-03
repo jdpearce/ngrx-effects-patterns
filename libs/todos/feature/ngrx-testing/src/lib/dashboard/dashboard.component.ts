@@ -37,4 +37,8 @@ export class DashboardComponent implements OnInit {
   multiActionDispatchEffect() {
     this.store.dispatch(ThingActions.initialisingAction());
   }
+
+  storeReadingEffect() {
+    this.store.dispatch(ThingActions.thingsModified());
+  }
 }

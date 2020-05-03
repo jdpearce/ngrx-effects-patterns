@@ -12,3 +12,8 @@ export const getThingsState = createFeatureSelector<
 >(THINGS_FEATURE_KEY);
 
 export const getLog = createSelector(getThingsState, state => state.log);
+
+export const selectThings = createSelector(
+  getThingsState,
+  state => state.things
+);

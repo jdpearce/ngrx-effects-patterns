@@ -1,9 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  concatMap,
+  filter,
+  map,
+  switchMap,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 import { ThingsService } from '../things.service';
 import * as ThingActions from './things.actions';
+import { ThingsPartialState } from './things.reducer';
+import { selectThings } from './things.selectors';
 
 @Injectable()
 export class ThingsEffects {
@@ -63,8 +74,22 @@ export class ThingsEffects {
     )
   );
 
+  // 4. Effects Reading from the Store
+  storeReadingEffect$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ThingActions.thingsModified),
+        withLatestFrom(this.store.pipe(select(selectThings))),
+        concatMap(([_action, things]) =>
+          this.thingService.persistThings(things)
+        )
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private readonly actions$: Actions,
-    private readonly thingService: ThingsService
+    private readonly thingService: ThingsService,
+    private readonly store: Store<ThingsPartialState>
   ) {}
 }

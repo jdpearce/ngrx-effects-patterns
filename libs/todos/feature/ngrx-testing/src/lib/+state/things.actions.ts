@@ -26,3 +26,5 @@ export const initialisingAction = createAction(
 export const initialiseComplete = createAction(
   '[Thing Actions] Initialise Complete'
 );
+
+export const thingsModified = createAction('[Thing Actions] Things Modified');

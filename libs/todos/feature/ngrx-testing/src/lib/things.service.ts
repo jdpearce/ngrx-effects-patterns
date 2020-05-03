@@ -24,4 +24,8 @@ export class ThingsService {
       }
     ]);
   }
+
+  persistThings(things: ThingEntity[]): Observable<ThingEntity[]> {
+    return of(things);
+  }
 }

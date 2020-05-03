@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { EffectsMetadata, getEffectsMetadata } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Store } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { ThingsService } from '../things.service';
@@ -14,7 +14,7 @@ describe('ThingsEffects', () => {
   let actions: Observable<any>;
   let effects: ThingsEffects;
   let service: ThingsService;
-  let store: Store<fromThings.ThingsState>;
+  let store: MockStore<fromThings.ThingsPartialState>;
   let metadata: EffectsMetadata<ThingsEffects>;
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('ThingsEffects', () => {
     effects = TestBed.inject(ThingsEffects);
     metadata = getEffectsMetadata(effects);
     service = TestBed.inject(ThingsService);
-    store = TestBed.inject(Store);
+    store = TestBed.inject(Store) as MockStore<fromThings.ThingsPartialState>;
   });
 
   // 1.
@@ -146,6 +146,35 @@ describe('ThingsEffects', () => {
       const expected = cold('a', { a: ThingActions.initialiseComplete() });
 
       expect(effects.initialiseThing$).toBeObservable(expected);
+    });
+  });
+
+  // 4.
+  describe('store reading effect', () => {
+    it('should read things from the store and do something with them', () => {
+      const things = [
+        {
+          id: '1',
+          name: 'Thing 1'
+        }
+      ];
+
+      store.setState({
+        [fromThings.THINGS_FEATURE_KEY]: {
+          log: [],
+          things
+        }
+      });
+
+      jest.spyOn(service, 'persistThings').mockReturnValue(of(things));
+
+      actions = hot('a', { a: ThingActions.thingsModified() });
+
+      expect(effects.storeReadingEffect$).toBeObservable(
+        cold('a', { a: things })
+      );
+
+      expect(service.persistThings).toHaveBeenCalledWith(things);
     });
   });
 });

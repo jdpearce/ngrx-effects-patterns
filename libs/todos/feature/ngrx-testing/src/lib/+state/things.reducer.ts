@@ -1,11 +1,12 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as ThingActions from './things.actions';
-import { LogEntry } from './things.models';
+import { LogEntry, ThingEntity } from './things.models';
 
 export const THINGS_FEATURE_KEY = 'things';
 
 export interface ThingsState {
   log: LogEntry[];
+  things: ThingEntity[];
 }
 
 export interface ThingsPartialState {
@@ -13,7 +14,8 @@ export interface ThingsPartialState {
 }
 
 export const initialState: ThingsState = {
-  log: []
+  log: [],
+  things: []
 };
 
 const thingsReducer = createReducer(
