@@ -33,4 +33,8 @@ export class DashboardComponent implements OnInit {
   dispatchingSwitchMapEffect() {
     this.store.dispatch(ThingActions.getThings());
   }
+
+  multiActionDispatchEffect() {
+    this.store.dispatch(ThingActions.initialisingAction());
+  }
 }

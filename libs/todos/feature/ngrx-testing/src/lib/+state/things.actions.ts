@@ -1,5 +1,10 @@
 import { createAction, props } from '@ngrx/store';
-import { ThingEntity } from './things.reducer';
+import { LogEntry, ThingEntity } from './things.models';
+
+export const addLogEntry = createAction(
+  '[Thing Actions] Add Log Entry',
+  props<{ entry: LogEntry }>()
+);
 
 export const performThingAction = createAction(
   '[Thing Actions] Perform Thing Action'
@@ -13,4 +18,11 @@ export const getThingsSuccess = createAction(
 export const getThingsFailure = createAction(
   '[Thing Actions] Get Things Failure',
   props<{ error: any }>()
+);
+
+export const initialisingAction = createAction(
+  '[Thing Actions] Initialising Action'
+);
+export const initialiseComplete = createAction(
+  '[Thing Actions] Initialise Complete'
 );

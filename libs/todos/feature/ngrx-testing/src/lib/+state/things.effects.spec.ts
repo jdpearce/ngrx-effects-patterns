@@ -117,4 +117,35 @@ describe('ThingsEffects', () => {
       );
     });
   });
+
+  // 3.
+  describe('multi-action dispatching effect', () => {
+    it('should emit initialiseComplete & getThingsSuccess if thing is found.', () => {
+      const things = [
+        {
+          id: '1',
+          name: 'Thing 1'
+        }
+      ];
+      jest.spyOn(service, 'getThings').mockReturnValue(of(things));
+
+      actions = hot('a', { a: ThingActions.initialisingAction() });
+      const expected = cold('(bc)', {
+        b: ThingActions.getThingsSuccess({ things }),
+        c: ThingActions.initialiseComplete()
+      });
+
+      expect(effects.initialiseThing$).toBeObservable(expected);
+    });
+
+    it('should just emit initialiseComplete if no things are found.', () => {
+      const things = [];
+      jest.spyOn(service, 'getThings').mockReturnValue(of(things));
+
+      actions = hot('a', { a: ThingActions.initialisingAction() });
+      const expected = cold('a', { a: ThingActions.initialiseComplete() });
+
+      expect(effects.initialiseThing$).toBeObservable(expected);
+    });
+  });
 });

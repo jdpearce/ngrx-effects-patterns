@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ThingEntity } from './+state/things.reducer';
+import { ThingEntity } from './+state/things.models';
 
 /**
  * This is just a dummy class.

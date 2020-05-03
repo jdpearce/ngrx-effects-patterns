@@ -1,12 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { ThingsService } from '../things.service';
 import * as ThingActions from './things.actions';
 
 @Injectable()
 export class ThingsEffects {
+  //#region
+  // Tiny hack for adding log messages to state on every action
+  addLogEntry$ = createEffect(() =>
+    this.actions$.pipe(
+      filter(action => action.type !== ThingActions.addLogEntry.type),
+      map(action =>
+        ThingActions.addLogEntry({
+          entry: {
+            time: Date.now(),
+            message: action.type
+          }
+        })
+      )
+    )
+  );
+  //#endregion
+
   // 1. Non-Dispatching Tap Effect
   performThingAction$ = createEffect(
     () =>
@@ -27,6 +44,22 @@ export class ThingsEffects {
           catchError(error => of(ThingActions.getThingsFailure({ error })))
         )
       )
+    )
+  );
+
+  // 3. Multi-Action Dispatch
+  initialiseThing$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ThingActions.initialisingAction),
+      switchMap(_action => this.thingService.getThings()),
+      switchMap(things => {
+        const actions = [];
+        if (things && things.length) {
+          actions.push(ThingActions.getThingsSuccess({ things }));
+        }
+        actions.push(ThingActions.initialiseComplete());
+        return actions;
+      })
     )
   );
 
