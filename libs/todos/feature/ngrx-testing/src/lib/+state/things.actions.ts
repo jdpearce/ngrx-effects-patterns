@@ -28,3 +28,10 @@ export const initialiseComplete = createAction(
 );
 
 export const thingsModified = createAction('[Thing Actions] Things Modified');
+
+export const startThingTimer = createAction(
+  '[Thing Actions] Start Thing Timer'
+);
+export const thingTimerComplete = createAction(
+  '[Thing Actions] Thing Timer Complete'
+);

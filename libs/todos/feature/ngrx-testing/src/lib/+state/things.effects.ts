@@ -5,8 +5,10 @@ import { of } from 'rxjs';
 import {
   catchError,
   concatMap,
+  delay,
   filter,
   map,
+  mapTo,
   switchMap,
   tap,
   withLatestFrom
@@ -18,6 +20,8 @@ import { selectThings } from './things.selectors';
 
 @Injectable()
 export class ThingsEffects {
+  static timerDuration = 2000; // 2 seconds
+
   //#region
   // Tiny hack for adding log messages to state on every action
   addLogEntry$ = createEffect(() =>
@@ -85,6 +89,15 @@ export class ThingsEffects {
         )
       ),
     { dispatch: false }
+  );
+
+  // 5. Timed Dispatch Effect
+  timedDispatchEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ThingActions.startThingTimer),
+      delay(ThingsEffects.timerDuration),
+      mapTo(ThingActions.thingTimerComplete())
+    )
   );
 
   constructor(

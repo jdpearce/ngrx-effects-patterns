@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EffectsMetadata, getEffectsMetadata } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Store } from '@ngrx/store';
@@ -176,5 +176,23 @@ describe('ThingsEffects', () => {
 
       expect(service.persistThings).toHaveBeenCalledWith(things);
     });
+  });
+
+  // 5.
+  describe('timed dispatch effect', () => {
+    it('should dispatch after a delay (fakeAsync)', fakeAsync(() => {
+      actions = of(ThingActions.startThingTimer());
+
+      let output;
+      effects.timedDispatchEffect$.subscribe(action => {
+        output = action;
+      });
+
+      expect(output).toBeUndefined();
+
+      tick(ThingsEffects.timerDuration);
+
+      expect(output).toEqual(ThingActions.thingTimerComplete());
+    }));
   });
 });

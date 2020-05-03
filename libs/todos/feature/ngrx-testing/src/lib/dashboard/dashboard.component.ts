@@ -41,4 +41,8 @@ export class DashboardComponent implements OnInit {
   storeReadingEffect() {
     this.store.dispatch(ThingActions.thingsModified());
   }
+
+  timedDispatchEffect() {
+    this.store.dispatch(ThingActions.startThingTimer());
+  }
 }
