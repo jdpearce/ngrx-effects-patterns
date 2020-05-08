@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { select, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store/src/models';
 import { of } from 'rxjs';
 import {
   catchError,
@@ -68,7 +69,7 @@ export class ThingsEffects {
       ofType(ThingActions.initialisingAction),
       switchMap(_action => this.thingService.getThings()),
       switchMap(things => {
-        const actions = [];
+        const actions: Action[] = [];
         if (things && things.length) {
           actions.push(ThingActions.getThingsSuccess({ things }));
         }
