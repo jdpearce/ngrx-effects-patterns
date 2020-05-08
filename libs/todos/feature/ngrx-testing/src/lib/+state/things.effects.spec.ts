@@ -1,7 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EffectsMetadata, getEffectsMetadata } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
 import { Observable, of, throwError } from 'rxjs';
@@ -11,7 +11,7 @@ import { ThingsEffects } from './things.effects';
 import * as fromThings from './things.reducer';
 
 describe('ThingsEffects', () => {
-  let actions: Observable<any>;
+  let actions: Observable<Action>;
   let effects: ThingsEffects;
   let service: ThingsService;
   let store: MockStore<fromThings.ThingsPartialState>;
