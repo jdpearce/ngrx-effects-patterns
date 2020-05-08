@@ -4,7 +4,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { ThingsService } from '../things.service';
 import * as ThingActions from './things.actions';
 import { ThingsEffects } from './things.effects';
@@ -88,32 +88,27 @@ describe('ThingsEffects', () => {
       // set up our action list
       actions = hot('a', { a: action });
 
-      // check that the cold observable output of the effect is what we expect it to be
-      // (the effect should be cold because nothing is subscribed to it)
+      // check that the output of the effect is what we expect it to be
       expect(effects.getThings$).toBeObservable(
         cold('a', { a: ThingActions.getThingsSuccess({ things }) })
       );
     });
 
-    it('should emit an error action when the service call is successful', () => {
+    it('should emit an error action when the service call is unsuccessful', () => {
       // set up the initial action that triggers the effect
       const action = ThingActions.getThings();
 
-      // set up our dummy list of things to return
-      // (we could create real things here if necessary)
-      const things = [];
+      const error = 'There was an error';
 
-      // spy on the service call and return our dummy list
-      // this makes sure we're not testing the service, just the effect
-      spyOn(service, 'getThings').and.returnValue(of(things));
+      // spy on the service call and return an error this time
+      spyOn(service, 'getThings').and.returnValue(throwError(error));
 
       // set up our action list
       actions = hot('a', { a: action });
 
-      // check that the cold observable output of the effect is what we expect it to be
-      // (the effect should be cold because nothing is subscribed to it)
+      // check that the output of the effect is what we expect it to be
       expect(effects.getThings$).toBeObservable(
-        cold('a', { a: ThingActions.getThingsSuccess({ things }) })
+        cold('a', { a: ThingActions.getThingsFailure({ error }) })
       );
     });
   });
